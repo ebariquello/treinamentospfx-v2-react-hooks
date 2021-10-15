@@ -1,0 +1,22 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+  
+    "simple-crud-wp": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/SimpleCRUD/SimpleCRUDWP.js",
+          "manifest": "./src/webparts/SimpleCRUD/SimpleCRUDWP.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+
+    "SimpleCRUDWPStrings": "lib/webparts/SimpleCRUD/loc/{locale}.js",
+    "PropertyControlStrings": "./node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+
+  }
+}
