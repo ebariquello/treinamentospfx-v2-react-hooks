@@ -37,11 +37,9 @@ import { ISimpleAddEditFormProps } from "./ISimpleAddEditFormProps";
   };
   let [formData, setFormData] = useState(_formData);
 
-
   let _container = mergeStyles({});
 
   let _btnCont = mergeStyles({ paddingTop: 20 });
-
 
   function _onSubmitForm(): void {
     setIsOpen(false);
