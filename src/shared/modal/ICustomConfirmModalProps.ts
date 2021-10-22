@@ -3,7 +3,8 @@ export interface ICustomConfirmModalProps{
   ModalTitle: string;
   IsModalOpen: boolean;
   HandleCancel?():any;
-  HandleDelConfirm?(itemID:number, listID: string):any;
-  ListID?: string;
+  //HandleDelConfirm?(itemID:number, listID: string):any;
+  HandleDelConfirm?(itemID:number):Promise<void>;
+  //ListID?: string;
   ItemID?: number;
 }

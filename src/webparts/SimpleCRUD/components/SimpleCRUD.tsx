@@ -10,80 +10,101 @@ import "@pnp/sp/items";
 
 import { ISimpleCRUDState } from "./ISimpleCRUDState";
 import SimpleAddEditForm from "./form/SimpleAddEditForm";
-import { IListItemProps } from "./form/IListItemProps";
+import { IFormModel } from "./form/IFormModel";
 import { CustomConfirmModal } from "../../../shared/modal/CustomConfirmModal";
+import { CustomListService } from "../../../services/CustomListService";
+import CustomGrid from "./grid/CustomGrid";
+import { PagedItemCollection } from "@pnp/sp/items";
 
 export default class SimpleCRUD extends React.Component<
   ISimpleCRUDProps,
   ISimpleCRUDState,
   {}
 > {
+  private customListService: CustomListService;
   constructor(props) {
     super(props);
 
     this.state = {
-      items: [],
+      pagedItems: null,
       showDelModal: false,
-      markedItemToEdit: 0, 
-      markedItemToDelete: 0
+      markedItemToEdit: 0,
+      markedItemToDelete: 0,
+      totalListItemCount: 0,
     };
+    this.customListService = new CustomListService(
+      this.props.spDataProvider,
+      true
+    );
   }
 
-  async componentDidMount() {
+  public async componentDidMount() {
     await this.loadList();
   }
+  // private async _loadItems(): Promise<any> {
+  //   let promiseArray = [];
+  //   promiseArray.push(this.templateNotificacao.loadItemsData());
+  //   promiseArray.push(this.notificacoes.getNotifications(this.props.notificationPageSize, this.props.spDataProvider.spUser.currentUserID));
+  //   return Promise.all(promiseArray);
+  // }
 
   public async loadList() {
-    const filterCriteria =
-      this.props.filterTitle === "" || this.props.filterTitle === undefined
-        ? `Title ne ''`
-        : `startswith(Title,${this.props.filterTitle})`;
-    const newItems: any[] = await sp.web.lists
-      .getById(this.props.list)
-      .items.filter(filterCriteria).get();
+    const listItemCount = await this.customListService.getLisItemsCount();
+    await this.customListService.getPagedItemsOrderByID(
+      5,
+      this.props.filterTitle
+    );
+    this.setState({
+      pagedItems: this.customListService.itemsDataPaged
+        ? this.customListService.itemsDataPaged
+        : undefined,
+      totalListItemCount: listItemCount,
+    });
+
+    // const newItems: any[] = await sp.web.lists
+    //   .getById(this.props.list)
+    //   .items.filter(filterCriteria).get();
 
     //  sp.web.lists.getById(this.props.list).items.filter(filterCriteria).getAll().then((resultItems)=>{
     //   this.setState({ items: resultItems });
     //   console.log(resultItems);
     // });
 
-    this.setState({ items: newItems });
-
+    //this.setState({ items: newItems });
   }
 
-  private async _addNewItem(item: IListItemProps) {
-    // sp.web.lists
-    //   .getById(item.listID)
-    //   .items.add({
-    //     Title: item.title,
-    //     LastName: item.lastName,
-    //     EmailAddress: item.emailAddress,
-    //     Password: item.password,
-    //   })
-    //   .then((d) => {
-    //     this.loadList();
-    //     console.log("New Item Created");
-    //   });
-
-    await sp.web.lists.getById(item.listID).items.add({
-      Title: item.title,
-      LastName: item.lastName,
-      EmailAddress: item.emailAddress,
-      Password: item.password,
+  private async addNewItem(formModel: IFormModel) {
+    //await sp.web.lists.getById(formModel.listID).items.add({
+      await sp.web.lists.getById(this.props.list).items.add({
+      Title: formModel.title,
+      LastName: formModel.lastName,
+      EmailAddress: formModel.emailAddress,
+      Password: formModel.password,
     });
     this.loadList();
-    //console.log("New Item Created");
   }
-  private async _deleteItem(itemID: number, listID: string) {
-    await sp.web.lists.getById(listID).items.getById(itemID).delete();
-    this.loadList();
-    this.setState({showDelModal:false});
-   
+  private async deleteItem() {
+    // await sp.web.lists
+    //   .getById(this.props.list)
+    //   .items.getById(this.state.markedItemToDelete)
+    //   .delete();
+    await this.customListService.deleteCustomListItem(this.state.markedItemToDelete);
+    await this.loadList();
+    this.setState({ showDelModal: false });
   }
+  private async showHideDelConfirmModal(show: boolean, itemID?: number) {
+    if (show === false || itemID === null || itemID === undefined) {
+      this.setState({ showDelModal: false, markedItemToDelete: 0 });
+    }
+    if (show===true && itemID >0 ) {
+      this.setState({ showDelModal: show, markedItemToDelete: itemID });
+    }
+  }
+ 
   public render(): React.ReactElement<ISimpleCRUDProps> {
     return (
       <div>
-        <table className="table">
+        {/* <table className="table">
           <thead>
             <tr>
               <th scope="col">ID</th>
@@ -112,19 +133,30 @@ export default class SimpleCRUD extends React.Component<
               );
             })}
           </tbody>
-        </table>
-        {this.state.showDelModal && <CustomConfirmModal IsModalOpen={this.state.showDelModal} 
-                    ModalBody={`Are sure to delete the item :${this.state.markedItemToDelete}`} 
-                    ModalTitle={`Confirm Deletation Item:${this.state.markedItemToDelete}`}
-                    HandleCancel={()=>{return;} } 
-                    HandleDelConfirm={(itemID, listID)=> this._deleteItem(itemID, listID) }
-                    ItemID={this.state.markedItemToDelete}
-                    ListID ={this.props.list}
-                    />}
+        </table> */}
+        <CustomGrid
+          scroll={true}
+          pagedItems={this.state.pagedItems}
+          totalItems={this.state.totalListItemCount}
+          handleDelConfirmModal={(itemID) => this.showHideDelConfirmModal(true, itemID)}
+        />
+        {this.state.showDelModal && (
+          <CustomConfirmModal
+            IsModalOpen={this.state.showDelModal}
+            ModalBody={`Are sure to delete the item :${this.state.markedItemToDelete}`}
+            ModalTitle={`Confirm Deletation Item:${this.state.markedItemToDelete}`}
+            HandleCancel={() => {
+              this.showHideDelConfirmModal(false);
+            }}
+            HandleDelConfirm={() => this.deleteItem()}
+            ItemID={this.state.markedItemToDelete}
+            // ListID ={this.props.list}
+          />
+        )}
         <SimpleAddEditForm
           buttonTitle="Add"
-          listID={this.props.list}
-          handleSubmit={(item) => this._addNewItem(item)}
+          //listID={this.props.list}
+          handleSubmit={(item) => this.addNewItem(item)}
         />
       </div>
     );

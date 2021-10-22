@@ -10,7 +10,7 @@ import {
 } from "office-ui-fabric-react";
 import * as React from "react";
 import { useState } from "react";
-import { IListItemProps } from "./IListItemProps";
+import { IFormModel } from "./IFormModel";
 import { ISimpleAddEditFormProps } from "./ISimpleAddEditFormProps";
 // import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -26,14 +26,15 @@ import { ISimpleAddEditFormProps } from "./ISimpleAddEditFormProps";
   //   };
 
   let [isOpen, setIsOpen] = useState(false);
-    //isOpen -> Objeto
+
+  //isOpen -> Objeto
   //setIsOpen -> função anonima que deverá configurar o valor do objeto.
-  let _formData: IListItemProps = {
+
+  let _formData: IFormModel = {
     title: "",
     lastName: "",
     emailAddress: "",
     password: "",
-    listID: props.listID
   };
   let [formData, setFormData] = useState(_formData);
 
@@ -43,11 +44,10 @@ import { ISimpleAddEditFormProps } from "./ISimpleAddEditFormProps";
 
   function _onSubmitForm(): void {
     setIsOpen(false);
-    props.handleSubmit(formData)
+    props.handleSubmit(formData);
     console.log('Form Fields values', JSON.stringify(formData));
   }
   
-
 
   return (
     <div className={_container}>

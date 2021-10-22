@@ -1,7 +1,10 @@
-import { IListItemProps } from "./IListItemProps";
+import { ICustomListItem } from "../../../../models/ICustomListItem";
+import { IFormModel } from "./IFormModel";
 
 export interface ISimpleAddEditFormProps{
     buttonTitle: string;
-    listID : string;
-    handleSubmit?(item: IListItemProps):any;
+    itemEdit?: ICustomListItem;
+    showForm?: boolean;
+    //listID : string;
+    handleSubmit?(formModel: IFormModel):any;
 }

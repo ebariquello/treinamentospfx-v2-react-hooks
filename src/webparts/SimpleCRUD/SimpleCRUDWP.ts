@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
-import { Version } from "@microsoft/sp-core-library";
+import { UrlQueryParameterCollection, Version } from "@microsoft/sp-core-library";
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
@@ -20,6 +20,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { sp } from "@pnp/sp";
 import "@pnp/sp/webs";
+import { DataFactory } from "../../core/Factory/DataFactory";
 
 export interface ISimpleCRUDWPProps {
   description: string;
@@ -36,13 +37,18 @@ export default class SimpleCRUDWP extends BaseClientSideWebPart<ISimpleCRUDWPPro
     });
   }
 
-  public render(): void {
+  public async render(): Promise<void> {
+    let queryParms = new UrlQueryParameterCollection(window.location.href);
+    if (queryParms.getValue("customWorkbenchStyles") ? true : false) {
+      await import("../../core/styles/customWorkbenchStyles.module.scss");
+    }
     const element: React.ReactElement<ISimpleCRUDProps> = React.createElement(
       SimpleCRUD,
       {
         description: this.properties.description,
         filterTitle: this.properties.filterTitle,
         list: this.properties.list,
+        spDataProvider: DataFactory.getSPDataProvider(this.context),
       }
     );
 

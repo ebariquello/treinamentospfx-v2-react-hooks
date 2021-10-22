@@ -1,7 +1,7 @@
-export interface IListItemProps{
+export interface IFormModel{
     title: string;
     lastName: string;
     emailAddress: string; 
     password:string;
-    listID: string;
+    //listID: string;
 }

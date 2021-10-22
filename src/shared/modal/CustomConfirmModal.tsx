@@ -89,7 +89,8 @@ export const CustomConfirmModal = (
   const ConfirmHandler = (): void => {
     setModalOpen(false);
     //setisPopup(current => !current)
-    customConfirmModalProps.HandleDelConfirm(customConfirmModalProps.ItemID, customConfirmModalProps.ListID);
+    //customConfirmModalProps.HandleDelConfirm(customConfirmModalProps.ItemID, customConfirmModalProps.ListID);
+    customConfirmModalProps.HandleDelConfirm(customConfirmModalProps.ItemID);
   };
 
   return (
