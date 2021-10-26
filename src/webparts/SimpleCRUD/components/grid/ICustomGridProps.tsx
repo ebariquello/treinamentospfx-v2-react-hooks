@@ -6,6 +6,6 @@ export interface ICustomGridProps   {
   pagedItems?: PagedItemCollection<ICustomListItem[] | undefined>;
   scroll: boolean;
   totalItems: number;
-  handleEditItem?(itemID:number):void;
+  handleEditItem?(customListItm:ICustomListItem):void;
   handleDelConfirmModal?(itemID:number):void;
 }

@@ -44,7 +44,7 @@ export class CustomListService extends BaseServices  {
    * Delete Custom List Item
    * @param itemID
    */
-  public async deleteCustomListItem(itemID: number){
+  public async deleteCustomListItem(itemID: number):Promise<void>{
     await this.spDataProvider.spList.delete(itemID,this.listRelativeUrl, true );
   }
 

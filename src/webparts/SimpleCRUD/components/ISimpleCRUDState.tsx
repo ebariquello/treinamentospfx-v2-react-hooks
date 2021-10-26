@@ -3,10 +3,9 @@ import { ICustomListItem } from "../../../models/ICustomListItem";
 
 export interface ISimpleCRUDState {
   pagedItems: PagedItemCollection<ICustomListItem[] | undefined>;
-  // nome: string;
-  // idade: string;
   totalListItemCount: number;
   showDelModal: boolean;
+  showAddEditForm: boolean;
   markedItemToDelete: number;
-  markedItemToEdit: number;
+  markedItemToEdit: ICustomListItem | undefined;
 }

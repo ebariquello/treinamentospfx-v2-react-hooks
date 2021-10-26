@@ -40,7 +40,6 @@ export const CustomConfirmModal = (
       alignItems: "stretch",
     },
     header: [
-      // eslint-disable-next-line deprecation/deprecation
       theme.fonts.xLarge,
       {
         flex: "1 1 auto",
@@ -63,11 +62,6 @@ export const CustomConfirmModal = (
       },
     },
   });
-  // const stackProps: Partial<IStackProps> = {
-  //   horizontal: true,
-  //   tokens: { childrenGap: 40 },
-  //   styles: { root: { marginBottom: 20 } },
-  // };
   const iconButtonStyles: Partial<IButtonStyles> = {
     root: {
       color: theme.palette.neutralPrimary,
@@ -82,14 +76,11 @@ export const CustomConfirmModal = (
 
   const CancelHandler = (): void => {
     setModalOpen(false);
-    //setisPopup(current => !current)
     customConfirmModalProps.HandleCancel();
   };
 
   const ConfirmHandler = (): void => {
     setModalOpen(false);
-    //setisPopup(current => !current)
-    //customConfirmModalProps.HandleDelConfirm(customConfirmModalProps.ItemID, customConfirmModalProps.ListID);
     customConfirmModalProps.HandleDelConfirm(customConfirmModalProps.ItemID);
   };
 

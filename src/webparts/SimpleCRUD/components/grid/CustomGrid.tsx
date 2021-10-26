@@ -17,8 +17,8 @@ export default class CustomGrid extends React.Component<
   public async loadMoreItems() {}
  
 
-  public async setToEditItem(itemID: number) {
-    this.props.handleEditItem(itemID);
+  public async setToEditItem(item: ICustomListItem) {
+    this.props.handleEditItem(item);
   }
   public async setToDeleteItem(itemID: number) {
     this.props.handleDelConfirmModal(itemID);
@@ -62,7 +62,7 @@ export default class CustomGrid extends React.Component<
                     <td>
                       <button
                         className="btn btn-warning btn-sm"
-                        onClick={() => this.setToEditItem(item.ID)}
+                        onClick={() => this.setToEditItem(item)}
                       >
                         Editar
                       </button>
