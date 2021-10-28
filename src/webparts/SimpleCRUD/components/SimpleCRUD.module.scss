@@ -1,6 +1,17 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
-
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../../../assets/fonts/SourceSansPro-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Source Sans Pro Light";
+  src: url("../../../assets/fonts/SourceSansPro-Light.ttf") format("truetype");
+}
 .SimpleCRUD {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
   .container {
     max-width: 900px;
     margin: 0px auto;
@@ -51,7 +62,7 @@
     // Basic Button
     outline: transparent;
     position: relative;
-    font-family: "Segoe UI WestEuropean","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+    font-family: "Segoe UI WestEuropean", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: $ms-font-size-m;
     font-weight: $ms-font-weight-regular;
@@ -69,6 +80,83 @@
       margin: 0 4px;
       vertical-align: top;
       display: inline-block;
+    }
+  }
+
+  .customListContainer {
+   overflow: auto !important;
+   height: 400px !important;
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 3fr 4fr 5fr 3fr;
+      grid-template-rows: 40px;
+      //grid-template-columns: auto;
+      justify-content: stretch;
+
+      &:last-child {
+        border-radius: 0px 0px 8px 8px;
+
+      }
+
+      div {
+        align-self: center;
+        font-family: 'Source Sans Pro Light';
+      }
+    }
+
+    .table {
+      margin: 50px auto 3em;
+      padding: 0;
+      border-radius: 8px;
+      .header {
+        padding: 0.8em 1.9em;
+        background-color: #28388f;
+        border-radius: 8px 8px 0px 0px;
+
+        div {
+          color: #fff;
+          font-family: 'Source Sans Pro';
+        }
+      }
+
+      // .icon {
+      //   margin-left: auto;
+      //   cursor: pointer;
+      // }
+    }
+
+    .rowEven {
+      padding: 0.8em 1.9em;
+      background: rgb(225, 235, 241);
+    }
+
+    .rowOdd {
+      padding: 0.8em 1.9em;
+      background: rgba(225, 235, 241, 0.5);
+    }
+
+    // .gridTemplateColumns3 {
+    //   grid-template-columns: 9fr 2fr 1fr;
+
+    //   &:last-child {
+    //     border-radius: 0px 0px 8px 8px;
+    //   }
+
+    //   div {
+    //     align-self: center;
+    //     font-family: 'Source Sans Pro Light';
+    //   }
+    // }
+    .actionsContainer {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-columns: auto;
+
+      .actionButton {
+        margin: 0px 10px 0px 10px;
+      }
     }
   }
 }

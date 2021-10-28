@@ -9,7 +9,7 @@ import { ICamlQuery, IListItemFormUpdateValue } from "@pnp/sp/lists";
 import { IBaseModel } from "../Models/IBaseModel";
 
 export class SPListProvider implements ISPListProvider {
-  constructor(protected readonly sp: SPRest, protected readonly webPartContext: WebPartContext) { }
+  constructor(protected readonly spRest: SPRest, protected readonly webPartContext: WebPartContext) { }
   public readonly restItemLimit: number = 5000;
 
   /**
@@ -19,7 +19,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public getById(ID: number, listRelativeUrl: string, rootWeb: boolean = false): Promise<IBaseModel> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb
       .getList(listRelativeUrl)
       .items.getById(ID)
@@ -35,7 +35,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public getItemsByFilter(listRelativeUrl: string, filter?: string, rootWeb: boolean = false): Promise<Array<IBaseModel>> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return filter
       ? spWeb
         .getList(listRelativeUrl)
@@ -55,7 +55,7 @@ export class SPListProvider implements ISPListProvider {
   * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
   */
   public getItems(listRelativeUrl: string, filter?: string, select?: string[], expand?: string[], order: boolean = true, elementOrder: string = "ID", rootWeb: boolean = false): Promise<IBaseModel[]> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     if (filter && select && expand) {
       return spWeb.getList(listRelativeUrl).items
         .filter(filter)
@@ -112,7 +112,7 @@ export class SPListProvider implements ISPListProvider {
     listRelativeUrl: string,
     rootWeb: boolean = false
   ): Promise<number>{
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     
       const result = await spWeb.getList(listRelativeUrl).get();
       return result.ItemCount;
@@ -159,7 +159,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public async getLastItemId(listRelativeUrl: string, rootWeb: boolean = false): Promise<number> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     let itemsResult = await spWeb
       .getList(listRelativeUrl)
       .items.select("ID")
@@ -175,7 +175,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public async getLastItem(listRelativeUrl: string, filter?: string, rootWeb: boolean = false): Promise<IBaseModel> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     const results = filter
       ? await spWeb
         .getList(listRelativeUrl)
@@ -199,7 +199,7 @@ export class SPListProvider implements ISPListProvider {
    * @returns Item Saved
    */
   public async save(item: IBaseModel, listRelativeUrl: string, rootWeb: boolean = false): Promise<IBaseModel> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     let propsToDelete: string[] = [];
     Object.keys(item).forEach(key => {
       if (key.indexOf("StringId") >= 0) {
@@ -243,7 +243,7 @@ export class SPListProvider implements ISPListProvider {
     clearSubscopes?: boolean,
     rootWeb: boolean = false
   ): Promise<any> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb
       .getList(listRelativeUrl)
       .breakRoleInheritance(copyRoleAssignments, clearSubscopes);
@@ -263,7 +263,7 @@ export class SPListProvider implements ISPListProvider {
     folderName: string,
     rootWeb: boolean = false
   ): Promise<IListItemFormUpdateValue[]> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     let propsToDelete: string[] = [];
     Object.keys(item).forEach(key => {
       if (key.indexOf("StringId") >= 0) {
@@ -305,7 +305,7 @@ export class SPListProvider implements ISPListProvider {
     originalFolderName?: string,
     rootWeb: boolean = false
   ): Promise<void> {
-    const spWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb
       .getFileByServerRelativeUrl(
         originalFolderName
@@ -341,7 +341,7 @@ export class SPListProvider implements ISPListProvider {
     listRelativeUrl: string,
     rootWeb: boolean = false
   ): Promise<boolean> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     try {
       await spWeb
         .getList(listRelativeUrl)
@@ -377,7 +377,7 @@ export class SPListProvider implements ISPListProvider {
     permissionsRemove?: { [key: number]: number }[],
     rootWeb: boolean = false
   ): Promise<any> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     await this.resetFolderPermission(folderName, listRelativeUrl);
     const folderItem = await spWeb
       .getList(listRelativeUrl)
@@ -410,7 +410,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public async resetFolderPermission(folderName: string, listRelativeUrl: string, rootWeb: boolean = false): Promise<void> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     const folderItem = await spWeb
       .getList(listRelativeUrl)
       .rootFolder.folders.getByName(folderName)
@@ -430,7 +430,7 @@ export class SPListProvider implements ISPListProvider {
     listRelativeUrl: string,
     rootWeb: boolean = false
   ): Promise<IFolder> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     let newFolder: IFolder;
     try {
       newFolder = await spWeb
@@ -457,7 +457,7 @@ export class SPListProvider implements ISPListProvider {
     listRelativeUrl: string,
     rootWeb: boolean = false
   ): Promise<void> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb
       .getList(listRelativeUrl)
       .rootFolder.folders.getByName(folderName)
@@ -475,7 +475,7 @@ export class SPListProvider implements ISPListProvider {
     listRelativeUrl: string,
     rootWeb: boolean = false
   ): Promise<void> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb
       .getList(listRelativeUrl)
       .items.getById(itemID)
@@ -496,7 +496,7 @@ export class SPListProvider implements ISPListProvider {
     attachments: IAttachmentFileInfo[],
     rootWeb: boolean = false
   ): Promise<void> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     if (item.ID > 0) {
       if (attachments.length > 0) {
         await spWeb
@@ -520,7 +520,7 @@ export class SPListProvider implements ISPListProvider {
     attachments: string[],
     rootWeb: boolean = false
   ): Promise<void> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     if (item.ID > 0) {
       if (attachments.length > 0) {
         await spWeb
@@ -538,7 +538,7 @@ export class SPListProvider implements ISPListProvider {
  * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default) 
  */
   public async getAttachments(item: IBaseModel, listRelativeUrl: string, rootWeb: boolean = false): Promise<any[]> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     if (item.ID > 0) {
       return await spWeb
         .getList(listRelativeUrl)
@@ -557,7 +557,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default) 
    */
   public getItemsWithAttachmentsFiltered(listRelativeUrl: string, expanded: string, filter?: string, rootWeb: boolean = false): Promise<Array<IBaseModel>> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return filter
       ? spWeb
         .getList(listRelativeUrl)
@@ -577,7 +577,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default) 
    */
   public getItemsPaged(listRelativeUrl: string, top: number, filter?: string, order: boolean = true, elementOrder: string = "ID", rootWeb: boolean = false): Promise<PagedItemCollection<IBaseModel[]>> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return filter
       ? spWeb.getList(listRelativeUrl).items
         .top(top)
@@ -597,7 +597,7 @@ export class SPListProvider implements ISPListProvider {
    * @param rootWeb IWeb context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
   public getItemsByCAMLQueryXML(listRelativeUrl: string, CAMLQuery: ICamlQuery, rootWeb: boolean = false): Promise<IBaseModel[]> {
-    const spWeb: IWeb = rootWeb ? this.sp.site.rootWeb : this.sp.web;
+    const spWeb: IWeb = rootWeb ? this.spRest.site.rootWeb : this.spRest.web;
     return spWeb.getList(listRelativeUrl).getItemsByCAMLQuery(CAMLQuery);
   }
 }

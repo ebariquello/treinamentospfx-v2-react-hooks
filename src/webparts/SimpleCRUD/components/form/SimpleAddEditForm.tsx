@@ -11,14 +11,12 @@ import {
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { ICustomListItem } from "../../../../models/ICustomListItem";
-import { IFormModel } from "./IFormModel";
+
 import { ISimpleAddEditFormProps } from "./ISimpleAddEditFormProps";
 
 export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
   const [isOpen, setIsOpen] = useState(props.editModeForm);
- // const [isNewForm, setNewForm] = useState(false);
- const [fieldValues, setFieldValue] = useState({});
- 
+  const [fieldValues, setFieldValue] = useState({});
 
   //isOpen -> Objeto
   //setIsOpen -> função anonima que deverá configurar o valor do objeto.
@@ -29,19 +27,14 @@ export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
     EmailAddress: "",
     Password: "",
   };
-  let [formData, setFormData] = useState(props.itemEdit!==undefined?props.itemEdit:_formData);
+  let [formData, setFormData] = useState(
+    props.itemEdit !== undefined ? props.itemEdit : _formData
+  );
 
   useEffect(() => {
-    // if (
-    //   (isNewForm && props.editModeForm) ||
-    //   (!isNewForm && props.editModeForm)
-    // ) {
-      setIsOpen(props.editModeForm);
-      setFormData(props.itemEdit);
-
-      //setNewForm(false);
-    //}
-  },[props.editModeForm]);
+    setIsOpen(props.editModeForm);
+    setFormData(props.itemEdit);
+  }, [props.editModeForm]);
 
   let _container = mergeStyles({});
 
@@ -49,19 +42,16 @@ export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
 
   function _onSubmitForm(): void {
     setIsOpen(false);
-    //setNewForm(false);
+
     props.handleSubmit(formData);
     console.log("Form Fields values", JSON.stringify(formData));
   }
-  function _handleInputOnChange(event){
-    //[event.target.name]: event.target.value
-    //onLoadStart={(e)=> {e.currentTarget.value = props.itemEdit !==undefined? props.itemEdit.Password : formData.Password}}
+  function _handleInputOnChange(event) {
     setFormData({
       ...formData,
       [event.target.name]: (event.target as HTMLInputElement).value,
     });
   }
-  
 
   return (
     <div className={_container}>
@@ -70,7 +60,7 @@ export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
         text={props.buttonTitle}
         onClick={() => {
           setIsOpen(true);
-          //setNewForm(true);
+          setFormData(_formData);
         }}
       />
       <Panel
@@ -82,40 +72,34 @@ export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
         }
         onDismiss={() => {
           setIsOpen(false);
-          //setNewForm(false);
           props.handleCancel();
         }}
       >
         <Stack tokens={{ childrenGap: 15 }}>
           <TextField
             label="First Name"
-            onChange={(e) => _handleInputOnChange(e) }
+            onChange={(e) => _handleInputOnChange(e)}
             name="Title"
-            value={formData==undefined?"": formData.Title}
-          
+            value={formData == undefined ? "" : formData.Title}
           ></TextField>
           <TextField
             label="Last Name"
             name="LastName"
-            onChange={(e) => _handleInputOnChange(e) }
-            value={formData==undefined?"": formData.LastName}
-           
+            onChange={(e) => _handleInputOnChange(e)}
+            value={formData == undefined ? "" : formData.LastName}
           ></TextField>
           <TextField
             label="Email"
             name="EmailAddress"
-            onChange={(e) => _handleInputOnChange(e) }
-            value={formData==undefined?"": formData.EmailAddress}
-           
+            onChange={(e) => _handleInputOnChange(e)}
+            value={formData == undefined ? "" : formData.EmailAddress}
           ></TextField>
           <TextField
             label="Password"
             name="Password"
             type="password"
-            onChange={(e) => _handleInputOnChange(e) }
-            value={formData==undefined?"": formData.Password}
-     
-           
+            onChange={(e) => _handleInputOnChange(e)}
+            value={formData == undefined ? "" : formData.Password}
           ></TextField>
         </Stack>
         <Stack
@@ -124,14 +108,14 @@ export const SimpleAddEditForm = (props: ISimpleAddEditFormProps) => {
           horizontalAlign="end"
           tokens={{ childrenGap: 10 }}
         >
-          <PrimaryButton text={ props.itemEdit == undefined
-            ? "Add new Item"
-            : `Save item`} onClick={() => _onSubmitForm()} />
+          <PrimaryButton
+            text={props.itemEdit == undefined ? "Add new Item" : `Save item`}
+            onClick={() => _onSubmitForm()}
+          />
           <DefaultButton
             text="Cancel"
             onClick={() => {
               setIsOpen(false);
-              //setNewForm(false);
               props.handleCancel();
             }}
           />

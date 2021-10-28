@@ -1,8 +1,6 @@
 import * as React from "react";
 import styles from "./SimpleCRUD.module.scss";
 import { ISimpleCRUDProps } from "./ISimpleCRUDProps";
-import { escape } from "@microsoft/sp-lodash-subset";
-
 import { sp } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
@@ -10,11 +8,10 @@ import "@pnp/sp/items";
 
 import { ISimpleCRUDState } from "./ISimpleCRUDState";
 import SimpleAddEditForm from "./form/SimpleAddEditForm";
-import { IFormModel } from "./form/IFormModel";
+
 import { CustomConfirmModal } from "../../../shared/modal/CustomConfirmModal";
 import { CustomListService } from "../../../services/CustomListService";
 import CustomGrid from "./grid/CustomGrid";
-import { PagedItemCollection } from "@pnp/sp/items";
 import { ICustomListItem } from "../../../models/ICustomListItem";
 
 export default class SimpleCRUD extends React.Component<
@@ -27,7 +24,7 @@ export default class SimpleCRUD extends React.Component<
     super(props);
 
     this.state = {
-      pagedItems: null,
+      items: null,
       showDelModal: false,
       showAddEditForm: false,
       markedItemToEdit: undefined,
@@ -52,8 +49,8 @@ export default class SimpleCRUD extends React.Component<
       this.props.filterTitle
     );
     this.setState({
-      pagedItems: this.customListService.itemsDataPaged
-        ? this.customListService.itemsDataPaged
+      items: this.customListService.itemsDataPaged
+        ? this.customListService.itemsDataPaged.results
         : undefined,
       totalListItemCount: listItemCount,
     });
@@ -68,6 +65,7 @@ export default class SimpleCRUD extends React.Component<
     this.setState({showAddEditForm:false, markedItemToEdit:undefined});
     
   }
+
   private async deleteItem() {
     await this.customListService.deleteCustomListItem(this.state.markedItemToDelete);
     await this.loadList();
@@ -88,16 +86,27 @@ export default class SimpleCRUD extends React.Component<
   private async cancelAddEditForm(){
     this.setState({showAddEditForm:false, markedItemToEdit:undefined});
   }
+
+  private async loadMoreItems() {
+    await this.customListService.getNextPageItems(6);
+    this.setState({
+      items: this.customListService?.itemsDataPaged
+        ? this.customListService.itemsDataPaged.results
+        : [],
+    });
+  }
  
   public render(): React.ReactElement<ISimpleCRUDProps> {
     return (
-      <div>
+      <div className={styles.SimpleCRUD}>
         <CustomGrid
           scroll={true}
-          pagedItems={this.state.pagedItems}
+          items={this.state.items}
           totalItems={this.state.totalListItemCount}
           handleDelConfirmModal={(itemID) => this.showHideDelConfirmModal(true, itemID)}
           handleEditItem={(item:ICustomListItem)=> {this.showSimpleAddEditForm(item);}}
+          handleLoadMoreItems={()=> this.loadMoreItems()}
+        
         />
         {this.state.showDelModal && (
           <CustomConfirmModal

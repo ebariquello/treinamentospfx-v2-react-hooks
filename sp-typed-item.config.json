@@ -1,0 +1,17 @@
+[
+  {
+    "siteUrl": "https://avanadedevbariquello.sharepoint.com/",
+    "authConfigPath": "./config/private.auth.json",
+    "outputPath": "./src/models/Generated",
+    "lists": [
+      {
+        "url": "Lists/ListaTeste",
+        "fileName": "ISPListaTeste",
+        "fields": {
+          "excludeHidden": true
+        }
+      }
+
+    ]
+  }
+]

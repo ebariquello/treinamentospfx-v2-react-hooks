@@ -19,7 +19,7 @@ export class CustomListService extends BaseServices  {
     filterTitle === "" || filterTitle === undefined
       ? `Title ne ''`
       : `startswith(Title,${filterTitle})`;
-    this.itemsDataPaged = await this.spDataProvider.spList.getItemsPaged(this.listRelativeUrl, top, filterCriteria, true, "ID", this._rootWeb);
+    this.itemsDataPaged = await this.spDataProvider.spList.getItemsPaged(this.listRelativeUrl, top, filterCriteria, false, "ID", this._rootWeb);
   }
 
   public async getLisItemsCount(): Promise<number> {
@@ -32,7 +32,7 @@ export class CustomListService extends BaseServices  {
   * @param total 
   */
   public async getNextPageItems(total: number): Promise<void> {
-    if (this.itemsDataPaged.hasNext && total > (this.itemsDataPaged.results.length)) {
+    if (this.itemsDataPaged.hasNext){
       let atualResults = this.itemsDataPaged.results;
       this.itemsDataPaged = await this.itemsDataPaged.getNext();
       Array.prototype.push.apply(atualResults, this.itemsDataPaged.results);
