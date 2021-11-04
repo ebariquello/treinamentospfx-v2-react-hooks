@@ -1,11 +1,8 @@
-
-import { IAttachmentFileInfo, ICamlQuery, IFolder, IFolderAddResult, IListItemFormUpdateValue, PagedItemCollection, sp } from "@pnp/sp/presets/all";
-
-
 import { IBaseModel } from "../Models/IBaseModel";
 import { CustomProperties } from "../Enums/Enums";
 import { IListItemAttachmentFile } from "../Models/IListItemAttachmentFile";
 import { ISPDataProvider } from "../Providers/ISPDataProvider";
+import { AttachmentFileInfo, CamlQuery, Folder } from "@pnp/sp";
 
 
 
@@ -152,7 +149,7 @@ export abstract class BaseServices {
   /**
    * Save/Update Item in Sharepoint List
    */
-  public async save(attachments?: IAttachmentFileInfo []): Promise<void> {
+  public async save(attachments?: AttachmentFileInfo []): Promise<void> {
     let itemSaved = await this.spDataProvider.spList.save(this.itemData, this.listRelativeUrl, this._rootWeb);
     this.itemData = itemSaved;
 
@@ -199,7 +196,7 @@ export abstract class BaseServices {
    */
   public async saveInFolder(
     folderName: string | number,
-    attachments?: IAttachmentFileInfo[]
+    attachments?: AttachmentFileInfo[]
   ): Promise<IBaseModel> {
     let notMove = this.itemData.ID > 0;
     let itemSaved = await this.spDataProvider.spList.save(this.itemData, this.listRelativeUrl, this._rootWeb);
@@ -274,7 +271,7 @@ export abstract class BaseServices {
    * @param folderName Folder Name
    * @returns New Folder
    */
-  public async createFolderDocumentLibrary(folderName: string): Promise<IFolder> {
+  public async createFolderDocumentLibrary(folderName: string): Promise<Folder | void> {
     return this.spDataProvider.spList.createFolderDocumentLibrary(folderName, this.listRelativeUrl, this._rootWeb);
   }
 
@@ -318,7 +315,7 @@ export abstract class BaseServices {
    * Load Item by Category using Caml Query
    * @param CAMLQuery Object with Caml Query
    */
-  public async loadItemsDataCAMLQuery(CAMLQuery: ICamlQuery): Promise<void> {
+  public async loadItemsDataCAMLQuery(CAMLQuery: CamlQuery): Promise<void> {
     let items = await this.spDataProvider.spList.getItemsByCAMLQueryXML(this.listRelativeUrl, CAMLQuery, this._rootWeb);
     this.itemsData = items;
   }

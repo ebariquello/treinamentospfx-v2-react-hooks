@@ -1,4 +1,5 @@
-import { IAttachmentFileInfo, ICamlQuery, IFolder, IFolderAddResult, IListItemFormUpdateValue, PagedItemCollection, sp } from "@pnp/sp/presets/all";
+
+import { AttachmentFileInfo, CamlQuery, Folder, ListItemFormUpdateValue, PagedItemCollection } from "@pnp/sp";
 import { IBaseModel } from "../Models/IBaseModel";
 
 export interface ISPListProvider {
@@ -114,7 +115,7 @@ export interface ISPListProvider {
   addAttachment(
     item: IBaseModel,
     listRelativeUrl: string,
-    attachments: IAttachmentFileInfo[],
+    attachments: AttachmentFileInfo[],
     rootWeb?: boolean
   ): Promise<void>;
 
@@ -168,7 +169,7 @@ export interface ISPListProvider {
     listRelativeUrl: string,
     folderName: string,
     rootWeb?: boolean
-  ): Promise<IListItemFormUpdateValue[]>;
+  ): Promise<ListItemFormUpdateValue[]>;
 
   /***
    * Move a Item to a specific folder
@@ -232,7 +233,7 @@ export interface ISPListProvider {
     folderName: string,
     listRelativeUrl: string,
     rootWeb?: boolean
-  ): Promise<IFolder>;
+  ): Promise<Folder |void>;
 
   /**
    * Delete Folder in Sharepoint Document Library
@@ -274,5 +275,5 @@ export interface ISPListProvider {
    * @param CAMLQuery Object with the query xml
    * @param rootWeb Web context: set true if gets the root web of the site collection, otherwise begins a web scoped REST request (default)
    */
-  getItemsByCAMLQueryXML(listRelativeUrl: string, CAMLQuery: ICamlQuery, rootWeb?: boolean): Promise<Array<IBaseModel>>;
+  getItemsByCAMLQueryXML(listRelativeUrl: string, CAMLQuery: CamlQuery, rootWeb?: boolean): Promise<Array<IBaseModel>>;
 }

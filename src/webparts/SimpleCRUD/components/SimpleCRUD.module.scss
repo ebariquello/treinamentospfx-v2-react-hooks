@@ -11,7 +11,7 @@
   font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 300;
-  font-size: 20px;
+  font-size: 15px;
   .container {
     max-width: 900px;
     margin: 0px auto;
@@ -75,8 +75,8 @@
     .label {
       font-weight: $ms-font-weight-semibold;
       font-size: $ms-font-size-m;
-      height: 32px;
-      line-height: 32px;
+      height: 25px;
+      line-height: 25px;
       margin: 0 4px;
       vertical-align: top;
       display: inline-block;
@@ -90,12 +90,12 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr 3fr 4fr 5fr 3fr;
-      grid-template-rows: 40px;
-      //grid-template-columns: auto;
+      grid-template-rows: 35px;
+     
       justify-content: stretch;
 
       &:last-child {
-        border-radius: 0px 0px 8px 8px;
+         border-radius: 0px 0px 8px 8px;
 
       }
 
@@ -106,13 +106,13 @@
     }
 
     .table {
-      margin: 50px auto 3em;
-      padding: 0;
-      border-radius: 8px;
+       margin: 30px auto 3em;
+      // padding: 0;
+      // border-radius: 8px;
       .header {
         padding: 0.8em 1.9em;
         background-color: #28388f;
-        border-radius: 8px 8px 0px 0px;
+        // border-radius: 8px 8px 0px 0px;
 
         div {
           color: #fff;
@@ -120,10 +120,6 @@
         }
       }
 
-      // .icon {
-      //   margin-left: auto;
-      //   cursor: pointer;
-      // }
     }
 
     .rowEven {
@@ -136,18 +132,6 @@
       background: rgba(225, 235, 241, 0.5);
     }
 
-    // .gridTemplateColumns3 {
-    //   grid-template-columns: 9fr 2fr 1fr;
-
-    //   &:last-child {
-    //     border-radius: 0px 0px 8px 8px;
-    //   }
-
-    //   div {
-    //     align-self: center;
-    //     font-family: 'Source Sans Pro Light';
-    //   }
-    // }
     .actionsContainer {
       display: grid;
       justify-content: center;

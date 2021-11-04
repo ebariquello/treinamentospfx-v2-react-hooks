@@ -1,10 +1,8 @@
-export interface ICustomListItem {
-    
-    Title?: string;
+import { IBaseModel } from "../core/Models/IBaseModel";
+export interface ICustomListItem extends IBaseModel {
     LastName?: string;
     Password?: string;
     EmailAddress?: string;
-    ID?: number;
     ContentType?: string;
     Modified?: Date;
     Created?: Date;

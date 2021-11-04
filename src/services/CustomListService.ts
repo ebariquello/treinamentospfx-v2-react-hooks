@@ -1,4 +1,5 @@
-import { PagedItemCollection } from "@pnp/sp/items/types";
+
+import { PagedItemCollection } from "@pnp/sp";
 import { BaseServices } from "../core/Services/BaseServices";
 import { ICustomListItem } from "../models/ICustomListItem";
 

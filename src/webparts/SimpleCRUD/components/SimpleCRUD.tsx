@@ -2,9 +2,7 @@ import * as React from "react";
 import styles from "./SimpleCRUD.module.scss";
 import { ISimpleCRUDProps } from "./ISimpleCRUDProps";
 import { sp } from "@pnp/sp";
-import "@pnp/sp/webs";
-import "@pnp/sp/lists";
-import "@pnp/sp/items";
+
 
 import { ISimpleCRUDState } from "./ISimpleCRUDState";
 import SimpleAddEditForm from "./form/SimpleAddEditForm";
@@ -90,7 +88,7 @@ export default class SimpleCRUD extends React.Component<
   private async loadMoreItems() {
     await this.customListService.getNextPageItems(6);
     this.setState({
-      items: this.customListService?.itemsDataPaged
+      items: this.customListService.itemsDataPaged
         ? this.customListService.itemsDataPaged.results
         : [],
     });
